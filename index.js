@@ -1,7 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
+import expressLayouts from "express-ejs-layouts";
 const app = express();
+app.use(expressLayouts)
+app.set("layout","layout")
 app.set("view engine", "ejs");
+app.use(express.static("public"))
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 const dbConnect = async () => {
