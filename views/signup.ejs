@@ -1,7 +1,17 @@
-<h2>User Signup Form</h2>
-<form action="/signup" method="POST">
-  <input type="text" name="name" placeholder="Name" required /><br>
-  <input type="email" name="email" placeholder="Email" required /><br>
-  <input type="password" name="password" placeholder="Password" required /><br>
-  <button type="submit">Signup</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>User Signup Form</h1>
+    <form action="/users/saveuser" method="POST">
+      <p><input type="text" name="name" placeholder="Name" /></p>
+      <p><input type="text" name="email" placeholder="Email" /></p>
+      <p><input type="password" name="password" placeholder="Password" /></p>
+      <p><button>Submit</button></p>
+    </form>
+  </body>
+</html>

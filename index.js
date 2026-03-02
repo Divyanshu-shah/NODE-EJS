@@ -1,15 +1,16 @@
 import express from "express";
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 import expressLayouts from "express-ejs-layouts";
 const app = express();
-app.use(expressLayouts)
-app.set("layout","layout")
+app.use(expressLayouts);
+app.set("layout", "layout");
 app.set("view engine", "ejs");
-app.use(express.static("public"))
+app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 const dbConnect = async () => {
-  await mongoose.connect("mongodb://localhost:27017/node-ejs");
+  await mongoose.connect("mongodb://localhost:27017/ejsnode");
 };
 const startServer = async () => {
   await dbConnect();
@@ -27,6 +28,15 @@ app.get("/", async (req, res) => {
   // res.json(products);
   res.render("index", { products });
 });
+
+const userSchema = mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  password: { type: String, required: true },
+  role: { type: String, default: "user" },
+});
+
+const userModel = mongoose.model("users", userSchema);
 
 app.get("/add", (req, res) => {
   res.render("add");
@@ -57,36 +67,31 @@ app.get("/:id/delete", async (req, res) => {
   res.redirect("/");
 });
 
-app.get("/signup", (req, res) => {
-  res.render("signup");
-});
-
-app.post("/signup", async (req, res) => {
-  const { name, email, password } = req.body;
-
-  const existingUser = await userModel.findOne({ email });
-  if (existingUser) {
-    return res.send("User already exists");
-  }
-
-  await userModel.create({ name, email, password });
-  res.redirect("/signin");
-});
-
-app.get("/signin", (req, res) => {
+app.get("/users/signin", (req, res) => {
   res.render("signin");
 });
 
-app.post("/signin", async (req, res) => {
-  const { email, password } = req.body;
+app.get("/users/signup", (req, res) => {
+  res.render("signup");
+});
 
-  const user = await userModel.findOne({ email, password });
-
-  if (!user) {
-    return res.send("Invalid Email or Password");
-  }
-
+app.post("/users/saveuser", async (req, res) => {
+  const body = req.body;
+  const hashPassword = await bcrypt.hash(body.password, 10);
+  body.password = hashPassword;
+  await userModel.create(body);
   res.redirect("/");
+});
+
+app.post("/users/checkuser", async (req, res) => {
+  const { email, password } = req.body;
+  const found = await userModel.findOne({ email });
+  if (found) {
+    const chkPassword = await bcrypt.compare(password, found.password);
+    if (chkPassword) {
+      res.redirect("/");
+    }
+  }
 });
 
 startServer();
