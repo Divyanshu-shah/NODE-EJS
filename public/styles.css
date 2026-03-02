@@ -7,3 +7,10 @@
     display: flex;
     justify-content: space-between;
 }
+
+.menu {
+    display: flex;
+    list-style-type: none;
+    gap: 20px;
+    padding: 10px;
+}

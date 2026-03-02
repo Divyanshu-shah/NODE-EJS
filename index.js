@@ -9,7 +9,7 @@ app.use(express.static("public"))
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 const dbConnect = async () => {
-  await mongoose.connect("mongodb://localhost:27017/merndatabase");
+  await mongoose.connect("mongodb://localhost:27017/node-ejs");
 };
 const startServer = async () => {
   await dbConnect();
@@ -54,6 +54,38 @@ app.post("/:id/save-product", async (req, res) => {
 app.get("/:id/delete", async (req, res) => {
   const id = req.params.id;
   await productModel.findByIdAndDelete(id);
+  res.redirect("/");
+});
+
+app.get("/signup", (req, res) => {
+  res.render("signup");
+});
+
+app.post("/signup", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  const existingUser = await userModel.findOne({ email });
+  if (existingUser) {
+    return res.send("User already exists");
+  }
+
+  await userModel.create({ name, email, password });
+  res.redirect("/signin");
+});
+
+app.get("/signin", (req, res) => {
+  res.render("signin");
+});
+
+app.post("/signin", async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await userModel.findOne({ email, password });
+
+  if (!user) {
+    return res.send("Invalid Email or Password");
+  }
+
   res.redirect("/");
 });
 
