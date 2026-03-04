@@ -1,16 +1,22 @@
 * {
-    margin: 0px
+    margin: 0;
+    padding: 0;
 }
 
 .header {
     background-color: orange;
     display: flex;
     justify-content: space-between;
+    padding: 10px 20px;
 }
 
-.menu {
+.header ul {
+    list-style: none;
     display: flex;
-    list-style-type: none;
-    gap: 20px;
-    padding: 10px;
+    gap: 15px;
+}
+
+.header a {
+    color: #333;
+    text-decoration: none;
 }
