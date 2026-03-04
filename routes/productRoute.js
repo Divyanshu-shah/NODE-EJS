@@ -5,11 +5,11 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   const products = await productModel.find();
-  res.render("products", { products });
+  res.render("product/products", { products });
 });
 
 router.get("/add", (req, res) => {
-  res.render("addproduct");
+  res.render("product/addproduct");
 });
 
 router.post("/save", async (req, res) => {
@@ -21,7 +21,7 @@ router.post("/save", async (req, res) => {
 router.get("/:id/edit", async (req, res) => {
   const id = req.params.id;
   const product = await productModel.findOne({ _id: id });
-  res.render("editproduct", { product });
+  res.render("product/editproduct", { product });
 });
 
 router.post("/:id/save-product", async (req, res) => {

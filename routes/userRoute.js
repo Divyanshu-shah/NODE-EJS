@@ -6,15 +6,15 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   const users = await userModel.find();
-  res.render("users", { users });
+  res.render("user/users", { users });
 });
 
 router.get("/signin", (req, res) => {
-  res.render("signin");
+  res.render("user/signin");
 });
 
 router.get("/signup", (req, res) => {
-  res.render("signup");
+  res.render("user/signup");
 });
 
 router.post("/saveuser", async (req, res) => {
@@ -37,13 +37,13 @@ router.post("/checkuser", async (req, res) => {
 });
 
 router.get("/add", (req, res) => {
-  res.render("adduser");
+  res.render("user/adduser");
 });
 
 router.get("/:id/edit", async (req, res) => {
   const id = req.params.id;
   const user = await userModel.findOne({ _id: id });
-  res.render("edituser", { user });
+  res.render("user/edituser", { user });
 });
 
 router.post("/:id/save-user", async (req, res) => {
